@@ -46,6 +46,7 @@ static const int MB = 1024 * 1024;
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <deque>
 #include <memory>
 #include <fstream>
 #include <functional>
@@ -67,7 +68,13 @@ template <typename T>
 using Vector = std::vector < T > ;
 
 template <typename T>
+using Deque = std::deque < T > ;
+
+template <typename T>
 using Pointer = std::shared_ptr < T >;
+
+template <typename T>
+using WeakPointer = std::weak_ptr < T > ;
 
 template <typename T>
 using Function = std::function < T >;

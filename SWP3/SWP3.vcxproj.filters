@@ -16,6 +16,9 @@
     <Filter Include="Interface">
       <UniqueIdentifier>{dc597f5c-a1e5-4a0f-a872-ba665357c2bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SWP">
+      <UniqueIdentifier>{3b61ec3a-abbb-4764-819d-681f3a757e12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -85,6 +88,12 @@
     </ClInclude>
     <ClInclude Include="TcpClient.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PeerState.h">
+      <Filter>SWP</Filter>
+    </ClInclude>
+    <ClInclude Include="PeerContext.h">
+      <Filter>SWP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -84,6 +84,8 @@
     <ClInclude Include="IStream.h" />
     <ClInclude Include="ITcpListener.h" />
     <ClInclude Include="NetworkStream.h" />
+    <ClInclude Include="PeerContext.h" />
+    <ClInclude Include="PeerState.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="SocketAddress.h" />
     <ClInclude Include="SocketTypes.h" />
