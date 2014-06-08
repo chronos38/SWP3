@@ -1,24 +1,5 @@
 #pragma once
 #include "ISocket.h"
-#include <exception>
-
-class SocketException : std::exception
-{
-	String m_sWhat;
-public:
-	SocketException(const String& _sWhat = "");
-	virtual ~SocketException() = default;
-	SocketException& operator=(const SocketException&) = default;
-	virtual const char* what() const override;
-};
-
-extern "C" struct AddressInfo {
-	AddressFamily eAddressFamily;
-	SocketType eSocketType;
-	ProtocolType eProtocolType;
-	AddressLength iAddressLength;
-	Address* pAddress;
-};
 
 class Socket : public ISocket
 {

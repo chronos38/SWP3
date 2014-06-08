@@ -1,19 +1,6 @@
 #pragma once
 #include "IAddress.h"
-
-enum class SocketType {
-	Stream = SOCK_STREAM,
-	Datagram = SOCK_DGRAM,
-	Raw = SOCK_RAW
-};
-
-enum class ProtocolType {
-	IP = IPPROTO_IP,
-	IPv4 = IPPROTO_IPV4,
-	IPv6 = IPPROTO_IPV6,
-	TCP = IPPROTO_TCP,
-	UDP = IPPROTO_UDP
-};
+#include <exception>
 
 enum class SocketShutdown {
 	Receive = 0,
@@ -31,6 +18,16 @@ enum SocketFlags {
 
 class ISocket;
 typedef Pointer<ISocket> SocketPtr;
+
+class SocketException : std::exception
+{
+	String m_sWhat;
+public:
+	SocketException(const String& _sWhat = "");
+	virtual ~SocketException() = default;
+	SocketException& operator=(const SocketException&) = default;
+	virtual const char* what() const override;
+};
 
 class ISocket
 {

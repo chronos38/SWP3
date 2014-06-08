@@ -1,7 +1,10 @@
 #include "Socket.h"
+#include "SocketTypes.h"
 #include <cstring>
 #include <cerrno>
 #include <algorithm>
+
+// TODO: Timeout und Available muss not implementiert werden
 
 Socket::Socket(SocketHandle _hSocket, AddressFamily _eAddressFamily, SocketType _eSocketType, ProtocolType _eProtocolType)
 {
@@ -126,17 +129,17 @@ void Socket::Listen(S32 _iBacklog)
 
 SocketPtr Socket::Accept()
 {
-	AddressStorage sAddress;
-	AddressLength iLength;
+	AddrStorage asAddress;
+	AddrLength iLength;
 
-	SocketHandle hSocket = accept(m_hSocket, (Address*)&sAddress, &iLength);
+	SocketHandle hSocket = accept(m_hSocket, (Addr*)&asAddress, &iLength);
 
 	if (hSocket == InvalidSocket) {
 		throw SocketException(strerror(errno));
 	}
 
 	// TODO: Da AddressFamily noch nicht alle möglichen Werte implementiert hat, kann dieser Code zu einem Fehler führen
-	return SocketPtr(new Socket(hSocket, (AddressFamily)sAddress.ss_family, m_eSocketType, m_eProtocolType));
+	return SocketPtr(new Socket(hSocket, (AddressFamily)asAddress.ss_family, m_eSocketType, m_eProtocolType));
 }
 
 void Socket::ShutDown(SocketShutdown _eHow)
@@ -161,30 +164,27 @@ void Socket::Close()
 
 S32 Socket::Receive(Vector<Byte>& _vBuffer_, int _iFlags) const
 {
-	S32 iResult = 0;
+	Vector<Byte> vBuffer(SendBufferSize);
 	S32 iSize = (S32)_vBuffer_.size();
-	char* pBuffer = new char[ReceiveBufferSize];
+	S32 iTotal = 0;
 
-	for (S32 received = 0; received < iSize; received += ReceiveBufferSize) {
-		int iLength = ((received + ReceiveBufferSize > iSize) ? (iSize - received) : ReceiveBufferSize);
-		int iReceived = recv(m_hSocket, pBuffer, ReceiveBufferSize, _iFlags);
+	for (int iN = 0; iTotal < iSize; iTotal += iN) {
+		int iLength = ((iTotal + ReceiveBufferSize > iSize) ? (iSize - iTotal) : ReceiveBufferSize);
+		iN = recv(m_hSocket, (char*)vBuffer.data(), ReceiveBufferSize, _iFlags);
 
-		if (iReceived == SocketError) {
-			delete pBuffer;
+		if (iN == SocketError) {
 			throw SocketException(strerror(errno));
-		} else if (iLength != ReceiveBufferSize && iReceived > iLength) {
-			std::copy(pBuffer, pBuffer + iLength, (char*)_vBuffer_.data() + iResult);
-			delete pBuffer;
+		} else if (iN == 0) {
+			throw SocketException("Remote end point closed connection");
+		} else if (iLength != ReceiveBufferSize && iN > iLength) {
+			std::copy(vBuffer.begin(), vBuffer.begin() + iLength, (char*)_vBuffer_.data() + iTotal);
 			throw SocketException("Received bytes exceed given buffer");
 		} else {
-			std::copy(pBuffer, pBuffer + iReceived, (char*)_vBuffer_.data() + iResult);
+			std::copy(vBuffer.begin(), vBuffer.begin() + iN, (char*)_vBuffer_.data() + iTotal);
 		}
-
-		iResult += iReceived;
 	}
 
-	delete pBuffer;
-	return iResult;
+	return iTotal;
 }
 
 S32 Socket::Send(const Vector<Byte>& _vBuffer, int _iFlags) const
@@ -212,78 +212,84 @@ S32 Socket::Send(const Vector<Byte>& _vBuffer, int _iFlags) const
 
 void Socket::SendFile(const String& _sPath) const
 {
-	Vector<Byte> vBuffer;
+	Vector<Byte> vBuffer(SendBufferSize);
 	InputFileStream ifFile(_sPath, std::ios_base::binary);
 	int iSize = 0;
-	char* pBuffer = new char[SendBufferSize];
 
 	ifFile.seekg(0, std::ios_base::end);
 	iSize = (int)ifFile.tellg();
 	ifFile.seekg(0, std::ios_base::beg);
 
-
-	for (S32 sent = 0; sent < iSize; sent += SendBufferSize) {
-		int iLength = ((sent + SendBufferSize > iSize) ? (iSize - sent) : SendBufferSize);
+	for (int iTotal = 0, iN = 0; iTotal < iSize; iTotal += iN) {
+		int iLength = ((iTotal + SendBufferSize > iSize) ? (iSize - iTotal) : SendBufferSize);
 		ifFile.read((char*)vBuffer.data(), iLength);
-		int iSent = send(m_hSocket, (const char*)vBuffer.data() + sent, iLength, 0);
+		iN = send(m_hSocket, (const char*)vBuffer.data() + iTotal, iLength, 0);
 
-		if (iSent == SocketError) {
-			delete pBuffer;
+		if (iN == SocketError) {
 			throw SocketException(strerror(errno));
-		} else if (iSent == 0) {
-			delete pBuffer;
+		} else if (iN == 0) {
 			throw SocketException("Remote end point closed connection");
-		} else if (iSent != iLength) {
-			delete pBuffer;
-			throw SocketException("Could not send all data");
 		}
 	}
-
-	delete pBuffer;
 }
 
 void Socket::SendFile(const String& _sPath, const Vector<Byte>& _vPreBuffer, const Vector<Byte>& _vPostBuffer) const
 {
 	Vector<Byte> vBuffer;
 	InputFileStream ifFile(_sPath, std::ios_base::binary);
-	char* pBuffer = new char[SendBufferSize];
-	int iSize = 0;
+	int iSize = (int)_vPreBuffer.size();
 
+	// PreBuffer
+	for (int iTotal = 0, iN = 0; iTotal < iSize; iTotal += iN) {
+		int iLength = ((iTotal + SendBufferSize > iSize) ? (iSize - iTotal) : SendBufferSize);
+		iN = send(m_hSocket, (const char*)_vPreBuffer.data() + iTotal, iLength, 0);
+
+		if (iN == SocketError) {
+			throw SocketException(strerror(errno));
+		} else if (iN == 0) {
+			throw SocketException("Remote end point closed connection");
+		}
+	}
+
+	vBuffer.resize(SendBufferSize);
 	ifFile.seekg(0, std::ios_base::end);
 	iSize = (int)ifFile.tellg();
 	ifFile.seekg(0, std::ios_base::beg);
 
-	ifFile.read((char*)vBuffer.data(), iSize);
-	vBuffer.insert(vBuffer.begin(), _vPreBuffer.begin(), _vPreBuffer.end());
-	vBuffer.insert(vBuffer.end(), _vPostBuffer.begin(), _vPostBuffer.end());
-
-
-	for (S32 sent = 0; sent < iSize; sent += SendBufferSize) {
-		int iLength = ((sent + SendBufferSize > iSize) ? (iSize - sent) : SendBufferSize);
+	// File
+	for (int iTotal = 0, iN = 0; iTotal < iSize; iTotal += iN) {
+		int iLength = ((iTotal + SendBufferSize > iSize) ? (iSize - iTotal) : SendBufferSize);
 		ifFile.read((char*)vBuffer.data(), iLength);
-		int iSent = send(m_hSocket, (const char*)vBuffer.data() + sent, iLength, 0);
+		iN = send(m_hSocket, (const char*)vBuffer.data() + iTotal, iLength, 0);
 
-		if (iSent == SocketError) {
-			delete pBuffer;
+		if (iN == SocketError) {
 			throw SocketException(strerror(errno));
-		} else if (iSent == 0) {
-			delete pBuffer;
+		} else if (iN == 0) {
 			throw SocketException("Remote end point closed connection");
-		} else if (iSent != iLength) {
-			delete pBuffer;
-			throw SocketException("Could not send all data");
 		}
 	}
 
-	delete pBuffer;
+	iSize = (int)_vPostBuffer.size();
+
+	// PostBuffer
+	for (int iTotal = 0, iN = 0; iTotal < iSize; iTotal += iN) {
+		int iLength = ((iTotal + SendBufferSize > iSize) ? (iSize - iTotal) : SendBufferSize);
+		iN = send(m_hSocket, (const char*)_vPreBuffer.data() + iTotal, iLength, 0);
+
+		if (iN == SocketError) {
+			throw SocketException(strerror(errno));
+		} else if (iN == 0) {
+			throw SocketException("Remote end point closed connection");
+		}
+	}
 }
 
 S32 Socket::ReceiveFrom(Vector<Byte>& _vBuffer_, AddressPtr& pAddress_, int _iFlags) const
 {
 	int iSize = (int)_vBuffer_.size();
-	AddressStorage sAddressStorage;
-	AddressLength iAddressLength = sizeof(sAddressStorage);
-	int iReceived = recvfrom(m_hSocket, (char*)_vBuffer_.data(), iSize, _iFlags, (Address*)&sAddressStorage, &iAddressLength);
+	AddrStorage asAddressStorage;
+	AddrLength iAddressLength = sizeof(asAddressStorage);
+	int iReceived = recvfrom(m_hSocket, (char*)_vBuffer_.data(), iSize, _iFlags, (Addr*)&asAddressStorage, &iAddressLength);
 
 	if (iReceived == SocketError) {
 		throw SocketException(strerror(errno));
@@ -292,8 +298,8 @@ S32 Socket::ReceiveFrom(Vector<Byte>& _vBuffer_, AddressPtr& pAddress_, int _iFl
 	}
 
 	// Erzeuge SocketAddress und speicher den Sender in pAddress_
-	SocketAddressPtr pSocketAddress = ISocketAddress::Create((AddressFamily)sAddressStorage.ss_family);
-	Byte* pBuffer = (Byte*)&sAddressStorage;
+	SocketAddressPtr pSocketAddress = ISocketAddress::Create((AddressFamily)asAddressStorage.ss_family);
+	Byte* pBuffer = (Byte*)&asAddressStorage;
 	pSocketAddress->Item.insert(pSocketAddress->Item.begin(), pBuffer, pBuffer + iAddressLength);
 	pAddress_ = IAddress::Create(pSocketAddress);
 	return (S32)iReceived;
@@ -301,20 +307,21 @@ S32 Socket::ReceiveFrom(Vector<Byte>& _vBuffer_, AddressPtr& pAddress_, int _iFl
 
 S32 Socket::SendTo(const Vector<Byte>& _vBuffer, const AddressPtr _pAddress, int _iFlags) const
 {
+	S32 iTotal = 0;
 	int iSize = (int)_vBuffer.size();
 	AddressInfoPtr pInfo = _pAddress->GetInfo();
 
-	int iSent = sendto(m_hSocket, (const char*)_vBuffer.data(), iSize, _iFlags, pInfo->pAddress, pInfo->iAddressLength);
-
-	if (iSent == SocketError) {
-		throw SocketException(strerror(errno));
-	} else if (iSent == 0) {
-		throw SocketException("Remote end point closed connection");
-	} else if (iSent != iSize) {
-		throw SocketException("Could not send entire buffer");
+	for (int iN = 0; iTotal < (int)_vBuffer.size(); iTotal += iN, iSize -= iN) {
+		iN = sendto(m_hSocket, (const char*)_vBuffer.data() + iTotal, iSize, _iFlags, pInfo->pAddress, pInfo->iAddressLength);
+		
+		if (iN == SocketError) {
+			throw SocketException(strerror(errno));
+		} else if (iN == 0) {
+			throw SocketException("Remote end point closed connection");
+		}
 	}
 
-	return (S32)iSent;
+	return iTotal;
 }
 
 SocketPtr ISocket::Create(AddressFamily _eAddressFamily, SocketType _eSocketType, ProtocolType _eProtocolType)

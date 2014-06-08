@@ -2,10 +2,12 @@
 
 #ifdef _MSC_VER
 
+#pragma comment(lib, "ws2_32.lib")
+
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 typedef SOCKET SocketHandle;
-typedef int AddressLength;
+typedef int AddrLength;
 #define CloseSocket closesocket
 #define InvalidSocket INVALID_SOCKET
 #define SocketError SOCKET_ERROR
@@ -20,7 +22,7 @@ typedef int AddressLength;
 #include <arpa/inet.h>
 #include <netdb.h>
 typedef int SocketHandle;
-typedef socklen_t AddressLength;
+typedef socklen_t AddrLength;
 #define CloseSocket close
 #define InetPton inet_pton
 #define InetNtop inet_ntop
@@ -32,10 +34,11 @@ typedef unsigned char byte;
 
 #endif
 
-typedef sockaddr Address;
-typedef sockaddr_in AddressIn;
-typedef sockaddr_in6 AddressIn6;
-typedef sockaddr_storage AddressStorage;
+typedef addrinfo AddrInfo;
+typedef sockaddr Addr;
+typedef sockaddr_in AddrIn;
+typedef sockaddr_in6 AddrIn6;
+typedef sockaddr_storage AddrStorage;
 
 static const int KB = 1024;
 static const int MB = 1024 * 1024;
