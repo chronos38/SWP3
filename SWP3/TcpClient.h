@@ -15,6 +15,7 @@ public:
 
 	virtual void Connect(AddressPtr _pAddress) override;
 	virtual bool IsConnected() const override;
+	virtual void Close() override;
 
 	virtual NetworkStreamPtr GetStream() const override;
 

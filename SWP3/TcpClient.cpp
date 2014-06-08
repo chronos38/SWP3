@@ -38,6 +38,11 @@ bool TcpClient::IsConnected() const
 	return m_pSocket->IsConnected();
 }
 
+void TcpClient::Close()
+{
+	m_nsNetworkStream->Close();
+}
+
 NetworkStreamPtr TcpClient::GetStream() const
 {
 	return m_nsNetworkStream;
@@ -48,7 +53,7 @@ TcpClientPtr ITcpClient::Create()
 	return TcpClientPtr(new TcpClient());
 }
 
-TcpClientPtr Create(AddressPtr _pAddress)
+TcpClientPtr ITcpClient::Create(AddressPtr _pAddress)
 {
 	return TcpClientPtr(new TcpClient(_pAddress));
 }

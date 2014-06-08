@@ -1,121 +1,155 @@
 #pragma once
 #include "PeerContext.h"
+#include "Exception.h"
+
+ExceptionClass(PeerStateException)
 
 class PeerState
 {
 public:
 
-	virtual void Listen(PeerContext* _pPeerContext) = 0;
+	virtual void Connect(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) = 0;
+
+	virtual void Listen(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) = 0;
 
 	virtual void Open(PeerContext* _pPeerContext) = 0;
 	virtual void Close(PeerContext* _pPeerContext) = 0;
 
-	virtual void SendState(PeerContext* _pPeerContext) = 0;
 	virtual void SendString(PeerContext* _pPeerContext, const String& _sMessage) = 0;
 	virtual void SendData(PeerContext* _pPeerContext, const Vector<Byte>& _vBuffer) = 0;
 
-	virtual PeerStates ReceiveState(PeerContext* _pPeerContext) = 0;
-	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage) = 0;
-	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer) = 0;
+	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) = 0;
+	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) = 0;
 
 protected:
 
-	virtual void ChangeState(PeerContext* _pPeerContext, PeerStatePtr pState);
-	virtual NetworkStreamPtr GetNetworkStream(PeerContext* _pPeerContext) const = 0;
+	virtual void ChangeState(PeerContext* _pPeerContext, PeerStatePtr _pState) const final;
+};
+
+class PeerReady : public PeerState
+{
+public:
+
+	static PeerStatePtr Instance();
+
+	virtual void Connect(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
+
+	virtual void Listen(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
+
+	virtual void Open(PeerContext* _pPeerContext) override;
+	virtual void Close(PeerContext* _pPeerContext) override;
+
+	virtual void SendString(PeerContext* _pPeerContext, const String& _sMessage) override;
+	virtual void SendData(PeerContext* _pPeerContext, const Vector<Byte>& _vBuffer) override;
+
+	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
+	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
+
+protected:
+
+private:
 };
 
 class PeerListen : public PeerState
 {
 public:
 
-	static PeerStatePtr Instance();
+	PeerListen(TcpListenerPtr _pListener);
 
-	virtual void Listen(PeerContext* _pPeerContext) override;
+	virtual void Connect(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
+
+	virtual void Listen(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
 
 	virtual void Open(PeerContext* _pPeerContext) override;
 	virtual void Close(PeerContext* _pPeerContext) override;
 
-	virtual void SendState(PeerContext* _pPeerContext) override;
 	virtual void SendString(PeerContext* _pPeerContext, const String& _sMessage) override;
 	virtual void SendData(PeerContext* _pPeerContext, const Vector<Byte>& _vBuffer) override;
 
-	virtual PeerStates ReceiveState(PeerContext* _pPeerContext) override;
-	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage) override;
-	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer) override;
+	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
+	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
 
 protected:
 
-	virtual NetworkStreamPtr GetNetworkStream(PeerContext* _pPeerContext) const override;
+private:
+
+	TcpListenerPtr m_pListener;
 };
 
 class PeerAlive : public PeerState
 {
 public:
 
-	static PeerStatePtr Instance();
+	PeerAlive(TcpClientPtr _pClient);
 
-	virtual void Listen(PeerContext* _pPeerContext) override;
+	virtual void Connect(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
+
+	virtual void Listen(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
 
 	virtual void Open(PeerContext* _pPeerContext) override;
 	virtual void Close(PeerContext* _pPeerContext) override;
 
-	virtual void SendState(PeerContext* _pPeerContext) override;
 	virtual void SendString(PeerContext* _pPeerContext, const String& _sMessage) override;
 	virtual void SendData(PeerContext* _pPeerContext, const Vector<Byte>& _vBuffer) override;
 
-	virtual PeerStates ReceiveState(PeerContext* _pPeerContext) override;
-	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage) override;
-	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer) override;
+	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
+	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
 
 protected:
 
-	virtual NetworkStreamPtr GetNetworkStream(PeerContext* _pPeerContext) const override;
+private:
+
+	TcpClientPtr m_pClient;
 };
 
-class PeerNotAlive : public PeerState
+class PeerDead : public PeerState
 {
 public:
 
-	static PeerStatePtr Instance();
+	PeerDead(TcpClientPtr _pClient);
 
-	virtual void Listen(PeerContext* _pPeerContext) override;
+	virtual void Connect(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
+
+	virtual void Listen(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
 
 	virtual void Open(PeerContext* _pPeerContext) override;
 	virtual void Close(PeerContext* _pPeerContext) override;
 
-	virtual void SendState(PeerContext* _pPeerContext) override;
 	virtual void SendString(PeerContext* _pPeerContext, const String& _sMessage) override;
 	virtual void SendData(PeerContext* _pPeerContext, const Vector<Byte>& _vBuffer) override;
 
-	virtual PeerStates ReceiveState(PeerContext* _pPeerContext) override;
-	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage) override;
-	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer) override;
+	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
+	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
 
 protected:
 
-	virtual NetworkStreamPtr GetNetworkStream(PeerContext* _pPeerContext) const override;
+private:
+
+	TcpClientPtr m_pClient;
 };
 
 class PeerClosed : public PeerState
 {
 public:
 
-	static PeerStatePtr Instance();
+	PeerClosed(TcpClientPtr _pClient);
 
-	virtual void Listen(PeerContext* _pPeerContext) override;
+	virtual void Connect(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
+
+	virtual void Listen(PeerContext* _pPeerContext, const String& _sHost, const String& _sService) override;
 
 	virtual void Open(PeerContext* _pPeerContext) override;
 	virtual void Close(PeerContext* _pPeerContext) override;
 
-	virtual void SendState(PeerContext* _pPeerContext) override;
 	virtual void SendString(PeerContext* _pPeerContext, const String& _sMessage) override;
 	virtual void SendData(PeerContext* _pPeerContext, const Vector<Byte>& _vBuffer) override;
 
-	virtual PeerStates ReceiveState(PeerContext* _pPeerContext) override;
-	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage) override;
-	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer) override;
+	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
+	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
 
 protected:
 
-	virtual NetworkStreamPtr GetNetworkStream(PeerContext* _pPeerContext) const override;
+private:
+
+	TcpClientPtr m_pClient;
 };

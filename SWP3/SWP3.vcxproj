@@ -69,6 +69,13 @@
     <ClCompile Include="Address.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="NetworkStream.cpp" />
+    <ClCompile Include="PeerAlive.cpp" />
+    <ClCompile Include="PeerClosed.cpp" />
+    <ClCompile Include="PeerContext.cpp" />
+    <ClCompile Include="PeerDead.cpp" />
+    <ClCompile Include="PeerListen.cpp" />
+    <ClCompile Include="PeerReady.cpp" />
+    <ClCompile Include="PeerState.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="SocketAddress.cpp" />
     <ClCompile Include="TcpClient.cpp" />

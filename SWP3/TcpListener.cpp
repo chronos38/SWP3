@@ -10,6 +10,7 @@ TcpListener::TcpListener(AddressPtr _pAddress)
 	}
 
 	m_pSocket = ISocket::Create(_pAddress->GetSocketAddress()->GetAddressFamily(), SocketType::Stream, pInfo->eProtocolType);
+	m_pSocket->Bind(_pAddress);
 }
 
 TcpListener::TcpListener(SocketPtr _pSocket)

@@ -18,6 +18,7 @@ public:
 
 	virtual void Connect(AddressPtr _pAddress) = 0;
 	virtual bool IsConnected() const = 0;
+	virtual void Close() = 0;
 
 	virtual NetworkStreamPtr GetStream() const = 0;
 };

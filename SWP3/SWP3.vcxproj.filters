@@ -42,6 +42,27 @@
     <ClCompile Include="TcpClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PeerContext.cpp">
+      <Filter>SWP</Filter>
+    </ClCompile>
+    <ClCompile Include="PeerListen.cpp">
+      <Filter>SWP</Filter>
+    </ClCompile>
+    <ClCompile Include="PeerDead.cpp">
+      <Filter>SWP</Filter>
+    </ClCompile>
+    <ClCompile Include="PeerClosed.cpp">
+      <Filter>SWP</Filter>
+    </ClCompile>
+    <ClCompile Include="PeerAlive.cpp">
+      <Filter>SWP</Filter>
+    </ClCompile>
+    <ClCompile Include="PeerReady.cpp">
+      <Filter>SWP</Filter>
+    </ClCompile>
+    <ClCompile Include="PeerState.cpp">
+      <Filter>SWP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Definitions.h">
