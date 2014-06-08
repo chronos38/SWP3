@@ -8,6 +8,7 @@
 
 Socket::Socket(SocketHandle _hSocket, AddressFamily _eAddressFamily, SocketType _eSocketType, ProtocolType _eProtocolType)
 {
+	m_bIsConnected = (_hSocket != InvalidSocket);
 	m_hSocket = _hSocket;
 	m_eAddressFamily = _eAddressFamily;
 	m_eSocketType = _eSocketType;
@@ -327,14 +328,4 @@ S32 Socket::SendTo(const Vector<Byte>& _vBuffer, const AddressPtr _pAddress, int
 SocketPtr ISocket::Create(AddressFamily _eAddressFamily, SocketType _eSocketType, ProtocolType _eProtocolType)
 {
 	return SocketPtr(new Socket(_eAddressFamily, _eSocketType, _eProtocolType));
-}
-
-SocketException::SocketException(const String& _sWhat)
-{
-	m_sWhat = _sWhat;
-}
-
-const char* SocketException::what() const
-{
-	return m_sWhat.c_str();
 }

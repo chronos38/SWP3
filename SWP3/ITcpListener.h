@@ -4,6 +4,8 @@
 class ITcpListener;
 typedef Pointer<ITcpListener> TcpListenerPtr;
 
+ExceptionClass(TcpListenerException)
+
 class ITcpListener
 {
 public:

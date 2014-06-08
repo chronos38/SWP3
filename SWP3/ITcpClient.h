@@ -1,8 +1,10 @@
 #pragma once
-#include "INetworkStream.h"
+#include "NetworkStream.h"
 
 class ITcpClient;
 typedef Pointer<ITcpClient> TcpClientPtr;
+
+ExceptionClass(TcpClientException)
 
 class ITcpClient
 {

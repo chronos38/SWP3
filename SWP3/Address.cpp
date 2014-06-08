@@ -166,13 +166,3 @@ U64 IAddress::NetworkToHost(U64 _uNetwork)
 {
 	throw AddressException("'NetworkToHost' is not yet implemented");
 }
-
-AddressException::AddressException(const String& _sWhat)
-{
-	m_sWhat = _sWhat;
-}
-
-const char* AddressException::what() const
-{
-	return m_sWhat.c_str();
-}

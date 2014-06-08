@@ -30,6 +30,15 @@
     <ClCompile Include="SocketAddress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Definitions.h">
@@ -50,9 +59,6 @@
     <ClInclude Include="IAddress.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="INetworkStream.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="ISocket.h">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -67,6 +73,18 @@
     </ClInclude>
     <ClInclude Include="ITcpClient.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkStream.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Exception.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpClient.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

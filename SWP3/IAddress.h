@@ -1,5 +1,6 @@
 #pragma once
 #include "ISocketAddress.h"
+#include "Exception.h"
 #include <string>
 #include <vector>
 #include <cstdint>
@@ -26,15 +27,7 @@ typedef Pointer<AddressInfo> AddressInfoPtr;
 class IAddress;
 typedef Pointer<IAddress> AddressPtr;
 
-class AddressException : std::exception
-{
-	String m_sWhat;
-public:
-	AddressException(const String& _sWhat = "");
-	virtual ~AddressException() = default;
-	AddressException& operator=(const AddressException&) = default;
-	virtual const char* what() const override;
-};
+ExceptionClass(AddressException)
 
 class IAddress
 {

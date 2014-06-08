@@ -68,22 +68,28 @@
   <ItemGroup>
     <ClCompile Include="Address.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NetworkStream.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="SocketAddress.cpp" />
+    <ClCompile Include="TcpClient.cpp" />
+    <ClCompile Include="TcpListener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Address.h" />
     <ClInclude Include="Definitions.h" />
+    <ClInclude Include="Exception.h" />
     <ClInclude Include="IAddress.h" />
-    <ClInclude Include="INetworkStream.h" />
     <ClInclude Include="ISocket.h" />
     <ClInclude Include="ISocketAddress.h" />
     <ClInclude Include="IStream.h" />
     <ClInclude Include="ITcpListener.h" />
+    <ClInclude Include="NetworkStream.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="SocketAddress.h" />
     <ClInclude Include="SocketTypes.h" />
     <ClInclude Include="ITcpClient.h" />
+    <ClInclude Include="TcpClient.h" />
+    <ClInclude Include="TcpListener.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

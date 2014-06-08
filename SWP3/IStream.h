@@ -1,10 +1,8 @@
 #pragma once
 #include "Definitions.h"
 
-class IStream;
-typedef Pointer<IStream> StreamPtr;
-
-class IStream
+// TODO: Klasse auf IStream umbennen
+class INetworkStream
 {
 public:
 

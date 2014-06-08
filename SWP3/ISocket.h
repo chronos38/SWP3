@@ -1,6 +1,6 @@
 #pragma once
 #include "IAddress.h"
-#include <exception>
+#include "Exception.h"
 
 enum class SocketShutdown {
 	Receive = 0,
@@ -19,15 +19,7 @@ enum SocketFlags {
 class ISocket;
 typedef Pointer<ISocket> SocketPtr;
 
-class SocketException : std::exception
-{
-	String m_sWhat;
-public:
-	SocketException(const String& _sWhat = "");
-	virtual ~SocketException() = default;
-	SocketException& operator=(const SocketException&) = default;
-	virtual const char* what() const override;
-};
+ExceptionClass(SocketException)
 
 class ISocket
 {
