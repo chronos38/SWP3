@@ -57,8 +57,8 @@ public:
 	virtual void Connect(const Vector<AddressPtr>& _vAddresses) = 0;
 	virtual bool IsConnected() const = 0;
 
-	virtual void Listen(S32 _iBacklog) = 0;
-	virtual SocketPtr Accept() = 0;
+	virtual void Listen(S32 _iBacklog) const = 0;
+	virtual SocketPtr Accept() const = 0;
 
 	virtual void ShutDown(SocketShutdown _eHow) = 0;
 	virtual void Close() = 0;

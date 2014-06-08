@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{dc597f5c-a1e5-4a0f-a872-ba665357c2bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -29,22 +32,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Transport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Definitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Socket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ISocket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IAddress.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ISocketAddress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Address.h">
@@ -55,6 +46,27 @@
     </ClInclude>
     <ClInclude Include="SocketAddress.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IAddress.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="INetworkStream.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ISocket.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ISocketAddress.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="IStream.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ITcpListener.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ITcpClient.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

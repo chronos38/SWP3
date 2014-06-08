@@ -120,14 +120,14 @@ bool Socket::IsConnected() const
 	return m_bIsConnected;
 }
 
-void Socket::Listen(S32 _iBacklog)
+void Socket::Listen(S32 _iBacklog) const
 {
 	if (listen(m_hSocket, _iBacklog) != 0) {
 		throw SocketException(strerror(errno));
 	}
 }
 
-SocketPtr Socket::Accept()
+SocketPtr Socket::Accept() const
 {
 	AddrStorage asAddress;
 	AddrLength iLength;

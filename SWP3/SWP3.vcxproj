@@ -75,12 +75,15 @@
     <ClInclude Include="Address.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="IAddress.h" />
+    <ClInclude Include="INetworkStream.h" />
     <ClInclude Include="ISocket.h" />
     <ClInclude Include="ISocketAddress.h" />
+    <ClInclude Include="IStream.h" />
+    <ClInclude Include="ITcpListener.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="SocketAddress.h" />
     <ClInclude Include="SocketTypes.h" />
-    <ClInclude Include="Transport.h" />
+    <ClInclude Include="ITcpClient.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

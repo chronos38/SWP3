@@ -27,8 +27,8 @@ public:
 	virtual void Connect(const Vector<AddressPtr>& _vAddresses) override;
 	virtual bool IsConnected() const override;
 
-	virtual void Listen(S32 _iBacklog) override;
-	virtual SocketPtr Accept() override;
+	virtual void Listen(S32 _iBacklog) const override;
+	virtual SocketPtr Accept() const override;
 
 	virtual void ShutDown(SocketShutdown _eHow) override;
 	virtual void Close() override;
