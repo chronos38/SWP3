@@ -8,6 +8,9 @@ typedef Pointer<PeerState> PeerStatePtr;
 class PeerContext;
 typedef Pointer<PeerContext> PeerContextPtr;
 
+class PeerContextComposite;
+typedef Pointer<PeerContextComposite> PeerContextCompositePtr;
+
 class PeerContext
 {
 	friend class PeerState;
@@ -16,6 +19,7 @@ public:
 
 	PeerContext() = default;
 	PeerContext(const PeerContext&) = default;
+	PeerContext(TcpClientPtr _pClient);
 	virtual ~PeerContext() = default;
 
 	virtual void Connect(const String& _sHost, const String& _sService);
@@ -31,6 +35,9 @@ public:
 	virtual void ReceiveString(String& _sMessage_);
 	virtual void ReceiveData(Vector<Byte>& _vBuffer_);
 
+	virtual String GetState();
+	virtual TcpClientPtr GetClient() const;
+
 protected:
 
 	virtual void ChangeState(PeerStatePtr _pPeerState);
@@ -38,7 +45,7 @@ protected:
 private:
 
 	PeerStatePtr m_pPeerState;
-
+	TcpClientPtr m_pClient;
 };
 
 class PeerContextComposite : PeerContext
@@ -60,8 +67,8 @@ public:
 	virtual void Open() override;
 	virtual void Close() override;
 
-	virtual void SendString(const String& _sMessage_) override;
-	virtual void SendData(const Vector<Byte>& _vBuffer_) override;
+	virtual void SendString(const String& _sMessage) override;
+	virtual void SendData(const Vector<Byte>& _vBuffer) override;
 
 private:
 

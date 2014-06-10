@@ -21,6 +21,8 @@ public:
 	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) = 0;
 	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) = 0;
 
+	virtual String GetState(PeerContext* _pPeerContext) const = 0;
+
 protected:
 
 	virtual void ChangeState(PeerContext* _pPeerContext, PeerStatePtr _pState) const final;
@@ -45,6 +47,8 @@ public:
 	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
 	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
 
+	virtual String GetState(PeerContext* _pPeerContext) const override;
+
 protected:
 
 private:
@@ -68,6 +72,8 @@ public:
 
 	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
 	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
+
+	virtual String GetState(PeerContext* _pPeerContext) const override;
 
 protected:
 
@@ -95,6 +101,8 @@ public:
 	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
 	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
 
+	virtual String GetState(PeerContext* _pPeerContext) const override;
+
 protected:
 
 private:
@@ -121,6 +129,8 @@ public:
 	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
 	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
 
+	virtual String GetState(PeerContext* _pPeerContext) const override;
+
 protected:
 
 private:
@@ -146,6 +156,8 @@ public:
 
 	virtual void ReceiveString(PeerContext* _pPeerContext, String& _sMessage_) override;
 	virtual void ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_) override;
+
+	virtual String GetState(PeerContext* _pPeerContext) const override;
 
 protected:
 

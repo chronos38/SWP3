@@ -19,6 +19,9 @@
     <Filter Include="SWP">
       <UniqueIdentifier>{3b61ec3a-abbb-4764-819d-681f3a757e12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Command">
+      <UniqueIdentifier>{a540f48c-78e9-4ae0-b48b-d3b05f7aa9dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="PeerState.cpp">
       <Filter>SWP</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,15 @@
     </ClInclude>
     <ClInclude Include="PeerContext.h">
       <Filter>SWP</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommand.h">
+      <Filter>Command</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandNew.h">
+      <Filter>Command</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

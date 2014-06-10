@@ -41,3 +41,8 @@ void PeerListen::ReceiveString(PeerContext* _pPeerContext, String& _sMessage_)
 void PeerListen::ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_)
 {
 }
+
+String PeerListen::GetState(PeerContext* _pPeerContext) const
+{
+	return "Listen";
+}

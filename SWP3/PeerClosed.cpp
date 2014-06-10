@@ -37,3 +37,8 @@ void PeerClosed::ReceiveString(PeerContext* _pPeerContext, String& _sMessage_)
 void PeerClosed::ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_)
 {
 }
+
+String PeerClosed::GetState(PeerContext* _pPeerContext) const
+{
+	return "Closed";
+}

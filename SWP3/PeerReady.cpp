@@ -71,3 +71,8 @@ void PeerReady::ReceiveString(PeerContext* _pPeerContext, String& _sMessage_)
 void PeerReady::ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_)
 {
 }
+
+String PeerReady::GetState(PeerContext* _pPeerContext) const
+{
+	return "Ready";
+}

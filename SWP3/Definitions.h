@@ -47,9 +47,16 @@ static const int MB = 1024 * 1024;
 #include <string>
 #include <vector>
 #include <deque>
+#include <list>
 #include <memory>
 #include <fstream>
 #include <functional>
+#include <atomic>
+#include <map>
+#include <unordered_map>
+#include <thread>
+#include <mutex>
+#include <future>
 
 typedef int8_t S8;
 typedef uint8_t U8;
@@ -71,6 +78,9 @@ template <typename T>
 using Deque = std::deque < T > ;
 
 template <typename T>
+using List = std::list < T > ;
+
+template <typename T>
 using Pointer = std::shared_ptr < T >;
 
 template <typename T>
@@ -79,5 +89,22 @@ using WeakPointer = std::weak_ptr < T > ;
 template <typename T>
 using Function = std::function < T >;
 
+template <typename T>
+using Atomic = std::atomic < T > ;
+
+template <typename Key, typename Value>
+using Map = std::map < Key, Value > ;
+
+template <typename Key, typename Value>
+using Hash = std::unordered_map < Key, Value > ;
+
+template <typename T>
+using LockGuard = std::lock_guard < T > ;
+
+template <typename T>
+using Future = std::future < T > ;
+
+typedef std::mutex Mutex;
+typedef std::thread Thread;
 typedef std::ifstream InputFileStream;
 typedef std::ofstream OutputFileStream;

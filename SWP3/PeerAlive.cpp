@@ -45,3 +45,8 @@ void PeerAlive::ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_)
 {
 	m_pClient->GetStream()->Read(_vBuffer_, 0, _vBuffer_.size());
 }
+
+String PeerAlive::GetState(PeerContext* _pPeerContext) const
+{
+	return "Alived";
+}

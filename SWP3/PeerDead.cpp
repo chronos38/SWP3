@@ -37,3 +37,8 @@ void PeerDead::ReceiveString(PeerContext* _pPeerContext, String& _sMessage_)
 void PeerDead::ReceiveData(PeerContext* _pPeerContext, Vector<Byte>& _vBuffer_)
 {
 }
+
+String PeerDead::GetState(PeerContext* _pPeerContext) const
+{
+	return "Dead";
+}

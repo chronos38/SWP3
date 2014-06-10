@@ -1,11 +1,6 @@
-#include <iostream>
-#include <cstdlib>
-#include <cstdio>
-#include "Definitions.h"
-
-using namespace std;
+#include "Application.h"
 
 int main(int argc, char** argv)
 {
-	return (EXIT_SUCCESS);
+	return Application(argc, argv).Execute();
 }
